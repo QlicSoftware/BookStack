@@ -38,6 +38,7 @@ return [
     'uploaded' => 'O servidor não permite o upload de arquivos com esse tamanho. Por favor, tente fazer o upload de arquivos de menor tamanho.',
     'image_upload_error' => 'Um erro aconteceu enquanto o servidor tentava efetuar o upload da imagem',
     'image_upload_type_error' => 'O tipo de imagem que está sendo feito upload é inválido',
+    'file_upload_timeout' => 'O upload do arquivo expirou.',
 
     // Attachments
     'attachment_page_mismatch' => 'Erro de \'Page mismatch\' durante a atualização do anexo',
@@ -49,6 +50,7 @@ return [
 
     // Entities
     'entity_not_found' => 'Entidade não encontrada',
+    'bookshelf_not_found' => 'Prateleira de Livros não encontrada',
     'book_not_found' => 'Livro não encontrado',
     'page_not_found' => 'Página não encontrada',
     'chapter_not_found' => 'Capítulo não encontrado',
