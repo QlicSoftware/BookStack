@@ -323,8 +323,9 @@ class MarkdownEditor {
     actionShowLinkSelector() {
         let cursorPos = this.cm.getCursor('from');
         window.EntitySelectorPopup.show(entity => {
+            let relativePath = (new URL(entity.link)).pathname;
             let selectedText = this.cm.getSelection() || entity.name;
-            let newText = `[${selectedText}](${entity.link})`;
+            let newText = `[${selectedText}](${relativePath})`;
             this.cm.focus();
             this.cm.replaceSelection(newText);
             this.cm.setCursor(cursorPos.line, cursorPos.ch + newText.length);
