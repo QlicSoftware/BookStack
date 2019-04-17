@@ -51,7 +51,6 @@ class Localization
     public function handle($request, Closure $next)
     {
         $defaultLang = config('app.locale');
-        config()->set('app.default_locale', $defaultLang);
 
         if (user()->isDefault() && config('app.auto_detect_locale')) {
             $locale = $this->autoDetectLocale($request, $defaultLang);
@@ -63,6 +62,8 @@ class Localization
         if (in_array($locale, $this->rtlLocales)) {
             config()->set('app.rtl', true);
         }
+
+
 
         app()->setLocale($locale);
         Carbon::setLocale($locale);

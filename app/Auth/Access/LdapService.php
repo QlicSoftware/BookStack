@@ -80,44 +80,24 @@ class LdapService
     public function getUserDetails($userName)
     {
         $emailAttr = $this->config['email_attribute'];
-        $displayNameAttr = $this->config['display_name_attribute'];
-
-        $user = $this->getUserWithAttributes($userName, ['cn', 'uid', 'dn', $emailAttr, $displayNameAttr]);
+        $user = $this->getUserWithAttributes($userName, ['cn', 'uid', 'dn', $emailAttr]);
 
         if ($user === null) {
             return null;
         }
 
-        $userCn = $this->getUserResponseProperty($user, 'cn', null);
         return [
-            'uid'   => $this->getUserResponseProperty($user, 'uid', $user['dn']),
-            'name'  => $this->getUserResponseProperty($user, $displayNameAttr, $userCn),
+            'uid'   => (isset($user['uid'])) ? $user['uid'][0] : $user['dn'],
+            'name'  => $user['cn'][0],
             'dn'    => $user['dn'],
-            'email' => $this->getUserResponseProperty($user, $emailAttr, null),
+            'email' => (isset($user[$emailAttr])) ? (is_array($user[$emailAttr]) ? $user[$emailAttr][0] : $user[$emailAttr]) : null
         ];
     }
 
     /**
-     * Get a property from an LDAP user response fetch.
-     * Handles properties potentially being part of an array.
-     * @param array $userDetails
-     * @param string $propertyKey
-     * @param $defaultValue
-     * @return mixed
-     */
-    protected function getUserResponseProperty(array $userDetails, string $propertyKey, $defaultValue)
-    {
-        if (isset($userDetails[$propertyKey])) {
-            return (is_array($userDetails[$propertyKey]) ? $userDetails[$propertyKey][0] : $userDetails[$propertyKey]);
-        }
-
-        return $defaultValue;
-    }
-
-    /**
      * @param Authenticatable $user
-     * @param string $username
-     * @param string $password
+     * @param string          $username
+     * @param string          $password
      * @return bool
      * @throws LdapException
      */
@@ -182,14 +162,25 @@ class LdapService
             throw new LdapException(trans('errors.ldap_extension_not_installed'));
         }
 
-         // Check if TLS_INSECURE is set. The handle is set to NULL due to the nature of
-         // the LDAP_OPT_X_TLS_REQUIRE_CERT option. It can only be set globally and not per handle.
+        // Get port from server string and protocol if specified.
+        $ldapServer = explode(':', $this->config['server']);
+        $hasProtocol = preg_match('/^ldaps{0,1}\:\/\//', $this->config['server']) === 1;
+        if (!$hasProtocol) {
+            array_unshift($ldapServer, '');
+        }
+        $hostName = $ldapServer[0] . ($hasProtocol?':':'') . $ldapServer[1];
+        $defaultPort = $ldapServer[0] === 'ldaps' ? 636 : 389;
+
+        /*
+         * Check if TLS_INSECURE is set. The handle is set to NULL due to the nature of
+         * the LDAP_OPT_X_TLS_REQUIRE_CERT option. It can only be set globally and not
+         * per handle.
+         */
         if ($this->config['tls_insecure']) {
             $this->ldap->setOption(null, LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_NEVER);
         }
 
-        $serverDetails = $this->parseServerString($this->config['server']);
-        $ldapConnection = $this->ldap->connect($serverDetails['host'], $serverDetails['port']);
+        $ldapConnection = $this->ldap->connect($hostName, count($ldapServer) > 2 ? intval($ldapServer[2]) : $defaultPort);
 
         if ($ldapConnection === false) {
             throw new LdapException(trans('errors.ldap_cannot_connect'));
@@ -202,27 +193,6 @@ class LdapService
 
         $this->ldapConnection = $ldapConnection;
         return $this->ldapConnection;
-    }
-
-    /**
-     * Parse a LDAP server string and return the host and port for
-     * a connection. Is flexible to formats such as 'ldap.example.com:8069' or 'ldaps://ldap.example.com'
-     * @param $serverString
-     * @return array
-     */
-    protected function parseServerString($serverString)
-    {
-        $serverNameParts = explode(':', $serverString);
-
-        // If we have a protocol just return the full string since PHP will ignore a separate port.
-        if ($serverNameParts[0] === 'ldaps' || $serverNameParts[0] === 'ldap') {
-            return ['host' => $serverString, 'port' => 389];
-        }
-
-        // Otherwise, extract the port out
-        $hostName = $serverNameParts[0];
-        $ldapPort = (count($serverNameParts) > 1) ? intval($serverNameParts[1]) : 389;
-        return ['host' => $hostName, 'port' => $ldapPort];
     }
 
     /**
@@ -329,10 +299,10 @@ class LdapService
         $count = 0;
 
         if (isset($userGroupSearchResponse[$groupsAttr]['count'])) {
-            $count = (int)$userGroupSearchResponse[$groupsAttr]['count'];
+            $count = (int) $userGroupSearchResponse[$groupsAttr]['count'];
         }
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i=0; $i<$count; $i++) {
             $dnComponents = $this->ldap->explodeDn($userGroupSearchResponse[$groupsAttr][$i], 1);
             if (!in_array($dnComponents[0], $ldapGroups)) {
                 $ldapGroups[] = $dnComponents[0];

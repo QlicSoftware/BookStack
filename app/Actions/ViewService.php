@@ -2,26 +2,21 @@
 
 use BookStack\Auth\Permissions\PermissionService;
 use BookStack\Entities\Entity;
-use BookStack\Entities\EntityProvider;
-use Illuminate\Support\Collection;
 
 class ViewService
 {
     protected $view;
     protected $permissionService;
-    protected $entityProvider;
 
     /**
      * ViewService constructor.
      * @param \BookStack\Actions\View $view
      * @param \BookStack\Auth\Permissions\PermissionService $permissionService
-     * @param EntityProvider $entityProvider
      */
-    public function __construct(View $view, PermissionService $permissionService, EntityProvider $entityProvider)
+    public function __construct(View $view, PermissionService $permissionService)
     {
         $this->view = $view;
         $this->permissionService = $permissionService;
-        $this->entityProvider = $entityProvider;
     }
 
     /**
@@ -55,21 +50,23 @@ class ViewService
      * Get the entities with the most views.
      * @param int $count
      * @param int $page
-     * @param string|array $filterModels
+     * @param Entity|false|array $filterModel
      * @param string $action - used for permission checking
-     * @return Collection
+     * @return
      */
-    public function getPopular(int $count = 10, int $page = 0, $filterModels = null, string $action = 'view')
+    public function getPopular($count = 10, $page = 0, $filterModel = false, $action = 'view')
     {
+        // TODO - Standardise input filter
         $skipCount = $count * $page;
-        $query = $this->permissionService
-            ->filterRestrictedEntityRelations($this->view, 'views', 'viewable_id', 'viewable_type', $action)
+        $query = $this->permissionService->filterRestrictedEntityRelations($this->view, 'views', 'viewable_id', 'viewable_type', $action)
             ->select('*', 'viewable_id', 'viewable_type', \DB::raw('SUM(views) as view_count'))
             ->groupBy('viewable_id', 'viewable_type')
             ->orderBy('view_count', 'desc');
 
-        if ($filterModels) {
-            $query->whereIn('viewable_type', $this->entityProvider->getMorphClasses($filterModels));
+        if ($filterModel && is_array($filterModel)) {
+            $query->whereIn('viewable_type', $filterModel);
+        } else if ($filterModel) {
+            $query->where('viewable_type', '=', $filterModel->getMorphClass());
         }
 
         return $query->with('viewable')->skip($skipCount)->take($count)->get()->pluck('viewable');
