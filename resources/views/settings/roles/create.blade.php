@@ -1,16 +1,17 @@
 @extends('simple-layout')
 
+@section('toolbar')
+    @include('settings/navbar', ['selected' => 'roles'])
+@stop
+
 @section('body')
 
-    <div class="container small">
-
-        <div class="py-m">
-            @include('settings.navbar', ['selected' => 'roles'])
+    <form action="{{ baseUrl("/settings/roles/new") }}" method="POST">
+        <div class="container">
+            <div class="row">
+                @include('settings/roles/form', ['title' => trans('settings.role_create'), 'icon' => 'plus'])
+            </div>
         </div>
-
-        <form action="{{ baseUrl("/settings/roles/new") }}" method="POST">
-            @include('settings.roles.form', ['title' => trans('settings.role_create')])
-        </form>
-    </div>
+    </form>
 
 @stop

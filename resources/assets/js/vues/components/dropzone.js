@@ -16,7 +16,6 @@ function mounted() {
         addRemoveLinks: true,
         dictRemoveFile: trans('components.image_upload_remove'),
         timeout: Number(window.uploadTimeout) || 60000,
-        maxFilesize: Number(window.uploadLimit) || 256,
         url: function() {
             return _this.uploadUrl;
         },

@@ -11,7 +11,6 @@ return [
     'save' => 'Save',
     'continue' => 'Continue',
     'select' => 'Select',
-    'toggle_all' => 'Toggle All',
     'more' => 'More',
 
     // Form Labels
@@ -24,7 +23,6 @@ return [
     // Actions
     'actions' => 'Actions',
     'view' => 'View',
-    'view_all' => 'View All',
     'create' => 'Create',
     'update' => 'Update',
     'edit' => 'Edit',
@@ -38,11 +36,6 @@ return [
     'reset' => 'Reset',
     'remove' => 'Remove',
     'add' => 'Add',
-
-    // Sort Options
-    'sort_name' => 'Name',
-    'sort_created_at' => 'Created Date',
-    'sort_updated_at' => 'Updated Date',
 
     // Misc
     'deleted_user' => 'Deleted User',
@@ -59,10 +52,6 @@ return [
     // Header
     'view_profile' => 'View Profile',
     'edit_profile' => 'Edit Profile',
-
-    // Layout tabs
-    'tab_info' => 'Info',
-    'tab_content' => 'Content',
 
     // Email Content
     'email_action_help' => 'If you’re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',

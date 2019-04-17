@@ -1,8 +1,8 @@
-@extends('tri-layout')
+@extends('sidebar-layout')
 
-@section('left')
-    <div id="revision-details" class="entity-details mb-xl">
-        <h5>{{ trans('common.details') }}</h5>
+@section('sidebar')
+    <div class="card">
+        <h3>@icon('info') {{ trans('common.details') }}</h3>
         <div class="body text-small text-muted">
             @include('partials.entity-meta', ['entity' => $revision])
         </div>
@@ -11,24 +11,20 @@
 
 @section('body')
 
-    <div class="mb-m">
-        @include('partials.breadcrumbs', ['crumbs' => [
-            $page->$book,
-            $page->chapter,
-            $page,
-            $page->getUrl('/revisions') => [
-                'text' => trans('entities.pages_revisions'),
-                'icon' => 'history',
-            ],
-            $revision->getUrl('/changes') => $diff ? trans('entities.pages_revisions_numbered_changes', ['id' => $revision->id]) : null,
-            $revision->getUrl() => !$diff ? trans('entities.pages_revisions_numbered', ['id' => $revision->id]) : null,
-        ]])
-    </div>
-
-    <div class="card content-wrap">
-        <div class="page-content page-revision">
-            @include('pages.page-display')
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-content page-revision">
+                    @include('pages.page-display')
+                </div>
+            </div>
         </div>
     </div>
 
+@stop
+
+@section('scripts')
+    <script>
+        setupPageShow(null);
+    </script>
 @stop

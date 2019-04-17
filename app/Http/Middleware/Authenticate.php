@@ -37,7 +37,7 @@ class Authenticate
             }
         }
 
-        if (!hasAppAccess()) {
+        if ($this->auth->guest() && !setting('app-public')) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {

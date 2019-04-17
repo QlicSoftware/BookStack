@@ -1,19 +1,18 @@
-<a href="{{$book->getUrl()}}" class="grid-card"  data-entity-type="book" data-entity-id="{{$book->id}}">
-    <div class="bg-book featured-image-container-wrap">
-        <div class="featured-image-container" @if($book->cover) style="background-image: url('{{ $book->getBookCover() }}')"@endif>
-        </div>
-        @icon('book')
+<div class="book-grid-item grid-card"  data-entity-type="book" data-entity-id="{{$book->id}}">
+    <div class="featured-image-container">
+        <a href="{{$book->getUrl()}}" title="{{$book->name}}">
+            <img src="{{$book->getBookCover()}}" alt="{{$book->name}}">
+        </a>
     </div>
     <div class="grid-card-content">
-        <h2>{{$book->getShortName(35)}}</h2>
+        <h2><a class="break-text" href="{{$book->getUrl()}}" title="{{$book->name}}">{{$book->getShortName(35)}}</a></h2>
         @if(isset($book->searchSnippet))
-            <p class="text-muted">{!! $book->searchSnippet !!}</p>
+            <p >{!! $book->searchSnippet !!}</p>
         @else
-            <p class="text-muted">{{ $book->getExcerpt(130) }}</p>
+            <p >{{ $book->getExcerpt(130) }}</p>
         @endif
     </div>
-    <div class="grid-card-footer text-muted ">
-        <p>@icon('star')<span title="{{$book->created_at->toDayDateTimeString()}}">{{ trans('entities.meta_created', ['timeLength' => $book->created_at->diffForHumans()]) }}</span></p>
-        <p>@icon('edit')<span title="{{ $book->updated_at->toDayDateTimeString() }}">{{ trans('entities.meta_updated', ['timeLength' => $book->updated_at->diffForHumans()]) }}</span></p>
+    <div class="grid-card-footer text-muted text-small">
+        <span>@include('partials.entity-meta', ['entity' => $book])</span>
     </div>
-</a>
+</div>

@@ -6,7 +6,6 @@ use BookStack\Exceptions\NotFoundException;
 use BookStack\Exceptions\UserUpdateException;
 use BookStack\Uploads\Image;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Images;
 
 class UserRepo
@@ -49,7 +48,7 @@ class UserRepo
 
     /**
      * Get all the users with their permissions.
-     * @return Builder|static
+     * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function getAllUsers()
     {
@@ -60,7 +59,7 @@ class UserRepo
      * Get all the users with their permissions in a paginated format.
      * @param int $count
      * @param $sortData
-     * @return Builder|static
+     * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function getAllUsersPaginatedAndSorted($count, $sortData)
     {
@@ -224,15 +223,16 @@ class UserRepo
      */
     public function getRecentlyCreated(User $user, $count = 20)
     {
-        $createdByUserQuery = function(Builder $query) use ($user) {
-            $query->where('created_by', '=', $user->id);
-        };
-
         return [
-            'pages'    => $this->entityRepo->getRecentlyCreated('page', $count, 0, $createdByUserQuery),
-            'chapters' => $this->entityRepo->getRecentlyCreated('chapter', $count, 0, $createdByUserQuery),
-            'books'    => $this->entityRepo->getRecentlyCreated('book', $count, 0, $createdByUserQuery),
-            'shelves'  => $this->entityRepo->getRecentlyCreated('bookshelf', $count, 0, $createdByUserQuery)
+            'pages'    => $this->entityRepo->getRecentlyCreated('page', $count, 0, function ($query) use ($user) {
+                $query->where('created_by', '=', $user->id);
+            }),
+            'chapters' => $this->entityRepo->getRecentlyCreated('chapter', $count, 0, function ($query) use ($user) {
+                $query->where('created_by', '=', $user->id);
+            }),
+            'books'    => $this->entityRepo->getRecentlyCreated('book', $count, 0, function ($query) use ($user) {
+                $query->where('created_by', '=', $user->id);
+            })
         ];
     }
 
@@ -247,7 +247,6 @@ class UserRepo
             'pages'    => $this->entityRepo->getUserTotalCreated('page', $user),
             'chapters' => $this->entityRepo->getUserTotalCreated('chapter', $user),
             'books'    => $this->entityRepo->getUserTotalCreated('book', $user),
-            'shelves'    => $this->entityRepo->getUserTotalCreated('bookshelf', $user),
         ];
     }
 
@@ -257,7 +256,7 @@ class UserRepo
      */
     public function getAllRoles()
     {
-        return $this->role->newQuery()->orderBy('name', 'asc')->get();
+        return $this->role->all();
     }
 
     /**

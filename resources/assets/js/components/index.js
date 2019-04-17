@@ -18,11 +18,7 @@ import toggleSwitch from "./toggle-switch";
 import pageDisplay from "./page-display";
 import shelfSort from "./shelf-sort";
 import homepageControl from "./homepage-control";
-import headerMobileToggle from "./header-mobile-toggle";
-import listSortControl from "./list-sort-control";
-import triLayout from "./tri-layout";
-import breadcrumbListing from "./breadcrumb-listing";
-import permissionsTable from "./permissions-table";
+
 
 const componentMapping = {
     'dropdown': dropdown,
@@ -45,11 +41,6 @@ const componentMapping = {
     'page-display': pageDisplay,
     'shelf-sort': shelfSort,
     'homepage-control': homepageControl,
-    'header-mobile-toggle': headerMobileToggle,
-    'list-sort-control': listSortControl,
-    'tri-layout': triLayout,
-    'breadcrumb-listing': breadcrumbListing,
-    'permissions-table': permissionsTable,
 };
 
 window.components = {};

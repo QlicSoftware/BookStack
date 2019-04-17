@@ -2,11 +2,20 @@
 
 namespace BookStack\Providers;
 
+use BookStack\Actions\Activity;
 use BookStack\Actions\ActivityService;
+use BookStack\Actions\View;
 use BookStack\Actions\ViewService;
+use BookStack\Auth\Permissions\PermissionService;
+use BookStack\Settings\Setting;
 use BookStack\Settings\SettingService;
+use BookStack\Uploads\HttpFetcher;
+use BookStack\Uploads\Image;
 use BookStack\Uploads\ImageService;
+use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Support\ServiceProvider;
+use Intervention\Image\ImageManager;
 
 class CustomFacadeProvider extends ServiceProvider
 {
@@ -28,19 +37,34 @@ class CustomFacadeProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('activity', function () {
-            return $this->app->make(ActivityService::class);
+            return new ActivityService(
+                $this->app->make(Activity::class),
+                $this->app->make(PermissionService::class)
+            );
         });
 
         $this->app->bind('views', function () {
-            return $this->app->make(ViewService::class);
+            return new ViewService(
+                $this->app->make(View::class),
+                $this->app->make(PermissionService::class)
+            );
         });
 
         $this->app->bind('setting', function () {
-            return $this->app->make(SettingService::class);
+            return new SettingService(
+                $this->app->make(Setting::class),
+                $this->app->make(Repository::class)
+            );
         });
 
         $this->app->bind('images', function () {
-            return $this->app->make(ImageService::class);
+            return new ImageService(
+                $this->app->make(Image::class),
+                $this->app->make(ImageManager::class),
+                $this->app->make(Factory::class),
+                $this->app->make(Repository::class),
+                $this->app->make(HttpFetcher::class)
+            );
         });
     }
 }
