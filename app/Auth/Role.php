@@ -74,7 +74,7 @@ class Role extends Model
      */
     public static function getRole($roleName)
     {
-        return static::where('name', '=', $roleName)->first();
+        return static::query()->where('name', '=', $roleName)->first();
     }
 
     /**
@@ -84,7 +84,7 @@ class Role extends Model
      */
     public static function getSystemRole($roleName)
     {
-        return static::where('system_name', '=', $roleName)->first();
+        return static::query()->where('system_name', '=', $roleName)->first();
     }
 
     /**
@@ -93,6 +93,15 @@ class Role extends Model
      */
     public static function visible()
     {
-        return static::where('hidden', '=', false)->orderBy('name')->get();
+        return static::query()->where('hidden', '=', false)->orderBy('name')->get();
+    }
+
+    /**
+     * Get the roles that can be restricted.
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public static function restrictable()
+    {
+        return static::query()->where('system_name', '!=', 'admin')->get();
     }
 }

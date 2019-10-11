@@ -1,6 +1,9 @@
 <?php namespace Tests\Uploads;
 
 
+use BookStack\Entities\Page;
+use Illuminate\Http\UploadedFile;
+
 trait UsesImages
 {
     /**
@@ -15,11 +18,11 @@ trait UsesImages
     /**
      * Get a test image that can be uploaded
      * @param $fileName
-     * @return \Illuminate\Http\UploadedFile
+     * @return UploadedFile
      */
     protected function getTestImage($fileName)
     {
-        return new \Illuminate\Http\UploadedFile($this->getTestImageFilePath(), $fileName, 'image/png', 5238);
+        return new UploadedFile($this->getTestImageFilePath(), $fileName, 'image/png', 5238, null, true);
     }
 
     /**
@@ -39,19 +42,47 @@ trait UsesImages
      */
     protected function getTestImagePath($type, $fileName)
     {
-        return '/uploads/images/' . $type . '/' . Date('Y-m-M') . '/' . $fileName;
+        return '/uploads/images/' . $type . '/' . Date('Y-m') . '/' . $fileName;
     }
 
     /**
      * Uploads an image with the given name.
      * @param $name
      * @param int $uploadedTo
+     * @param string $contentType
      * @return \Illuminate\Foundation\Testing\TestResponse
      */
-    protected function uploadImage($name, $uploadedTo = 0)
+    protected function uploadImage($name, $uploadedTo = 0, $contentType = 'image/png')
     {
         $file = $this->getTestImage($name);
-        return $this->call('POST', '/images/gallery/upload', ['uploaded_to' => $uploadedTo], [], ['file' => $file], []);
+        return $this->withHeader('Content-Type', $contentType)
+            ->call('POST', '/images/gallery', ['uploaded_to' => $uploadedTo], [], ['file' => $file], []);
+    }
+
+    /**
+     * Upload a new gallery image.
+     * Returns the image name.
+     * Can provide a page to relate the image to.
+     * @param Page|null $page
+     * @return array
+     */
+    protected function uploadGalleryImage(Page $page = null)
+    {
+        if ($page === null) {
+            $page = Page::query()->first();
+        }
+
+        $imageName = 'first-image.png';
+        $relPath = $this->getTestImagePath('gallery', $imageName);
+        $this->deleteImage($relPath);
+
+        $upload = $this->uploadImage($imageName, $page->id);
+        $upload->assertStatus(200);
+        return [
+            'name' => $imageName,
+            'path' => $relPath,
+            'page' => $page
+        ];
     }
 
     /**

@@ -21,11 +21,13 @@ return [
     'email' => 'Correo electrónico',
     'password' => 'Contraseña',
     'password_confirm' => 'Confirmar Contraseña',
-    'password_hint' => 'Debe contener más de 5 caracteres',
+    'password_hint' => 'Debe contener más de 7 caracteres',
     'forgot_password' => '¿Contraseña Olvidada?',
     'remember_me' => 'Recordarme',
     'ldap_email_hint' => 'Por favor introduzca un mail para utilizar con esta cuenta.',
     'create_account' => 'Crear una Cuenta',
+    'already_have_account' => '¿Ya tienes una cuenta?',
+    'dont_have_account' => '¿No tienes una cuenta?',
     'social_login' => 'Login Social',
     'social_registration' => 'Registro Social',
     'social_registration_text' => 'Registrar y entrar utilizando otro servicio.',
@@ -62,4 +64,14 @@ return [
     'email_not_confirmed_click_link' => 'Por favor siga el enlace en el correo electrónico que ha sido enviado durante el proceso de registro.',
     'email_not_confirmed_resend' => 'Si no puede encontrar el correo electrónico, puede solicitar el renvío del correo electrónico de confirmación rellenando el formulario que se muestra a continuación.',
     'email_not_confirmed_resend_button' => 'Reenviar Correo Electrónico de confirmación',
+
+    // User Invite
+    'user_invite_email_subject' => 'As sido invitado a unirte a :appName!',
+    'user_invite_email_greeting' => 'Se ha creado una cuenta para usted en :appName.',
+    'user_invite_email_text' => 'Clica en el botón a continuación para ajustar una contraseña y poder acceder:',
+    'user_invite_email_action' => 'Ajustar la Contraseña de la Cuenta',
+    'user_invite_page_welcome' => '¡Bienvenido a :appName!',
+    'user_invite_page_text' => 'Para completar la cuenta y tener acceso es necesario que configure una contraseña que se utilizará para entrar en :appName en futuros accesos.',
+    'user_invite_page_confirm_button' => 'Confirmar Contraseña',
+    'user_invite_success' => '¡Contraseña guardada, ya tiene acceso a :appName!'
 ];

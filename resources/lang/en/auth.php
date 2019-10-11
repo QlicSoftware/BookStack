@@ -21,11 +21,13 @@ return [
     'email' => 'Email',
     'password' => 'Password',
     'password_confirm' => 'Confirm Password',
-    'password_hint' => 'Must be over 5 characters',
+    'password_hint' => 'Must be over 7 characters',
     'forgot_password' => 'Forgot Password?',
     'remember_me' => 'Remember Me',
     'ldap_email_hint' => 'Please enter an email to use for this account.',
     'create_account' => 'Create Account',
+    'already_have_account' => 'Already have an account?',
+    'dont_have_account' => 'Don\'t have an account?',
     'social_login' => 'Social Login',
     'social_registration' => 'Social Registration',
     'social_registration_text' => 'Register and sign in using another service.',
@@ -62,4 +64,14 @@ return [
     'email_not_confirmed_click_link' => 'Please click the link in the email that was sent shortly after you registered.',
     'email_not_confirmed_resend' => 'If you cannot find the email you can re-send the confirmation email by submitting the form below.',
     'email_not_confirmed_resend_button' => 'Resend Confirmation Email',
+
+    // User Invite
+    'user_invite_email_subject' => 'You have been invited to join :appName!',
+    'user_invite_email_greeting' => 'An account has been created for you on :appName.',
+    'user_invite_email_text' => 'Click the button below to set an account password and gain access:',
+    'user_invite_email_action' => 'Set Account Password',
+    'user_invite_page_welcome' => 'Welcome to :appName!',
+    'user_invite_page_text' => 'To finalise your account and gain access you need to set a password which will be used to log-in to :appName on future visits.',
+    'user_invite_page_confirm_button' => 'Confirm Password',
+    'user_invite_success' => 'Password set, you now have access to :appName!'
 ];

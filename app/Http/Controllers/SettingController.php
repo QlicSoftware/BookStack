@@ -1,5 +1,7 @@
 <?php namespace BookStack\Http\Controllers;
 
+use BookStack\Auth\User;
+use BookStack\Uploads\ImageRepo;
 use BookStack\Uploads\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -7,6 +9,19 @@ use Setting;
 
 class SettingController extends Controller
 {
+    protected $imageRepo;
+
+    /**
+     * SettingController constructor.
+     * @param $imageRepo
+     */
+    public function __construct(ImageRepo $imageRepo)
+    {
+        $this->imageRepo = $imageRepo;
+        parent::__construct();
+    }
+
+
     /**
      * Display a listing of the settings.
      * @return Response
@@ -19,7 +34,10 @@ class SettingController extends Controller
         // Get application version
         $version = trim(file_get_contents(base_path('version')));
 
-        return view('settings/index', ['version' => $version]);
+        return view('settings.index', [
+            'version' => $version,
+            'guestUser' => User::getDefault()
+        ]);
     }
 
     /**
@@ -29,8 +47,11 @@ class SettingController extends Controller
      */
     public function update(Request $request)
     {
-        $this->preventAccessForDemoUsers();
+        $this->preventAccessInDemoMode();
         $this->checkPermission('settings-manage');
+        $this->validate($request, [
+            'app_logo' => $this->imageRepo->getImageValidationRules(),
+        ]);
 
         // Cycles through posted settings and update them
         foreach ($request->all() as $name => $value) {
@@ -38,10 +59,24 @@ class SettingController extends Controller
                 continue;
             }
             $key = str_replace('setting-', '', trim($name));
-            Setting::put($key, $value);
+            setting()->put($key, $value);
         }
 
-        session()->flash('success', trans('settings.settings_save_success'));
+        // Update logo image if set
+        if ($request->has('app_logo')) {
+            $logoFile = $request->file('app_logo');
+            $this->imageRepo->destroyByType('system');
+            $image = $this->imageRepo->saveNew($logoFile, 'system', 0, null, 86);
+            setting()->put('app-logo', $image->url);
+        }
+
+        // Clear logo image if requested
+        if ($request->get('app_logo_reset', null)) {
+            $this->imageRepo->destroyByType('system');
+            setting()->remove('app-logo');
+        }
+
+        $this->showSuccessNotification(trans('settings.settings_save_success'));
         return redirect('/settings');
     }
 
@@ -57,7 +92,7 @@ class SettingController extends Controller
         // Get application version
         $version = trim(file_get_contents(base_path('version')));
 
-        return view('settings/maintenance', ['version' => $version]);
+        return view('settings.maintenance', ['version' => $version]);
     }
 
     /**
@@ -76,14 +111,14 @@ class SettingController extends Controller
         $imagesToDelete = $imageService->deleteUnusedImages($checkRevisions, $dryRun);
         $deleteCount = count($imagesToDelete);
         if ($deleteCount === 0) {
-            session()->flash('warning', trans('settings.maint_image_cleanup_nothing_found'));
+            $this->showWarningNotification(trans('settings.maint_image_cleanup_nothing_found'));
             return redirect('/settings/maintenance')->withInput();
         }
 
         if ($dryRun) {
             session()->flash('cleanup-images-warning', trans('settings.maint_image_cleanup_warning', ['count' => $deleteCount]));
         } else {
-            session()->flash('success', trans('settings.maint_image_cleanup_success', ['count' => $deleteCount]));
+            $this->showSuccessNotification(trans('settings.maint_image_cleanup_success', ['count' => $deleteCount]));
         }
 
         return redirect('/settings/maintenance#image-cleanup')->withInput();
