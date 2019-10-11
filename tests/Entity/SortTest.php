@@ -9,7 +9,7 @@ class SortTest extends TestCase
 {
     protected $book;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->book = Book::first();
@@ -19,7 +19,7 @@ class SortTest extends TestCase
     {
         $this->asAdmin();
         $pageRepo = app(PageRepo::class);
-        $draft = $pageRepo->getDraftPage($this->book);
+        $draft = $pageRepo->getNewDraftPage($this->book);
 
         $resp = $this->get($this->book->getUrl());
         $resp->assertSee($draft->name);
@@ -213,7 +213,6 @@ class SortTest extends TestCase
             'entity_selection' => 'book:' . $newBook->id,
             'name' => 'My copied test page'
         ]);
-
         $pageCopy = Page::where('name', '=', 'My copied test page')->first();
 
         $movePageResp->assertRedirect($pageCopy->getUrl());

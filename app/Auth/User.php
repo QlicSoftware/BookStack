@@ -3,6 +3,7 @@
 use BookStack\Model;
 use BookStack\Notifications\ResetPassword;
 use BookStack\Uploads\Image;
+use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -10,6 +11,20 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Class User
+ * @package BookStack\Auth
+ * @property string $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property bool $email_confirmed
+ * @property int $image_id
+ * @property string $external_auth_id
+ * @property string $system_name
+ */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, Notifiable;
@@ -24,7 +39,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * The attributes that are mass assignable.
      * @var array
      */
-    protected $fillable = ['name', 'email', 'image_id'];
+    protected $fillable = ['name', 'email'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -39,12 +54,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $permissions;
 
     /**
+     * This holds the default user when loaded.
+     * @var null|User
+     */
+    protected static $defaultUser = null;
+
+    /**
      * Returns the default public user.
      * @return User
      */
     public static function getDefault()
     {
-        return static::where('system_name', '=', 'public')->first();
+        if (!is_null(static::$defaultUser)) {
+            return static::$defaultUser;
+        }
+        
+        static::$defaultUser = static::where('system_name', '=', 'public')->first();
+        return static::$defaultUser;
     }
 
     /**
@@ -168,14 +194,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function getAvatar($size = 50)
     {
-        $default = baseUrl('/user_avatar.png');
+        $default = url('/user_avatar.png');
         $imageId = $this->image_id;
         if ($imageId === 0 || $imageId === '0' || $imageId === null) {
             return $default;
         }
 
         try {
-            $avatar = $this->avatar ? baseUrl($this->avatar->getThumb($size, $size, false)) : $default;
+            $avatar = $this->avatar ? url($this->avatar->getThumb($size, $size, false)) : $default;
         } catch (\Exception $err) {
             $avatar = $default;
         }
@@ -197,7 +223,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function getEditUrl()
     {
-        return baseUrl('/settings/users/' . $this->id);
+        return url('/settings/users/' . $this->id);
     }
 
     /**
@@ -206,7 +232,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function getProfileUrl()
     {
-        return baseUrl('/user/' . $this->id);
+        return url('/user/' . $this->id);
     }
 
     /**
@@ -216,12 +242,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function getShortName($chars = 8)
     {
-        if (strlen($this->name) <= $chars) {
+        if (mb_strlen($this->name) <= $chars) {
             return $this->name;
         }
 
         $splitName = explode(' ', $this->name);
-        if (strlen($splitName[0]) <= $chars) {
+        if (mb_strlen($splitName[0]) <= $chars) {
             return $splitName[0];
         }
 

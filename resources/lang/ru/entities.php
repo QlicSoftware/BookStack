@@ -1,14 +1,17 @@
 <?php
+/**
+ * Text used for 'Entities' (Document Structure Elements) such as
+ * Books, Shelves, Chapters & Pages
+ */
 return [
 
-    /**
-     * Shared
-     */
+    //Shared
     'recently_created' => 'Недавно созданные',
     'recently_created_pages' => 'Недавно созданные страницы',
     'recently_updated_pages' => 'Недавно обновленные страницы',
     'recently_created_chapters' => 'Недавно созданные главы',
     'recently_created_books' => 'Недавно созданные книги',
+    'recently_created_shelves' => 'Недавно созданные полки',
     'recently_update' => 'Недавно обновленные',
     'recently_viewed' => 'Недавно просмотренные',
     'recent_activity' => 'Недавние действия',
@@ -31,17 +34,13 @@ return [
     'export_pdf' => 'PDF файл',
     'export_text' => 'Текстовый файл',
 
-    /**
-     * Permissions and restrictions
-     */
+    //Permissions and restrictions
     'permissions' => 'Разрешения',
     'permissions_intro' => 'После включения эти разрешения будут иметь приоритет над любыми установленными полномочиями.',
     'permissions_enable' => 'Включение пользовательских разрешений',
     'permissions_save' => 'Сохранить разрешения',
 
-    /**
-     * Search
-     */
+    //Search
     'search_results' => 'Результаты поиска',
     'search_total_results_found' => ':count результатов найдено|:count всего результатов найдено',
     'search_clear' => 'Очистить поиск',
@@ -52,11 +51,13 @@ return [
     'search_content_type' => 'Тип содержимого',
     'search_exact_matches' => 'Точные соответствия',
     'search_tags' => 'Поиск по тегам',
+    'search_options' => 'Параметры',
     'search_viewed_by_me' => 'Просмотрено мной',
     'search_not_viewed_by_me' => 'Не просматривалось мной',
     'search_permissions_set' => 'Набор разрешений',
     'search_created_by_me' => 'Создано мной',
     'search_updated_by_me' => 'Обновлено мной',
+    'search_date_options' => 'Параметры даты',
     'search_updated_before' => 'Обновлено до',
     'search_updated_after' => 'Обновлено после',
     'search_created_before' => 'Создано до',
@@ -64,9 +65,39 @@ return [
     'search_set_date' => 'Установить дату',
     'search_update' => 'Обновить поиск',
 
-    /**
-     * Books
-     */
+     //Shelves
+    'shelf' => 'Полка',
+    'shelves' => 'Полки',
+    'x_shelves' => ':count полок|:count полок',
+    'shelves_long' => 'Книжные полки',
+    'shelves_empty' => 'Полки не созданы',
+    'shelves_create' => 'Создать новую полку',
+    'shelves_popular' => 'Популярные полки',
+    'shelves_new' => 'Новые полки',
+    'shelves_new_action' => 'Новая полка',
+    'shelves_popular_empty' => 'Популярные полки появятся здесь.',
+    'shelves_new_empty' => 'Последние созданные полки появятся здесь.',
+    'shelves_save' => 'Сохранить полку',
+    'shelves_books' => 'Книги из этой полки',
+    'shelves_add_books' => 'Добавить книгу в эту полку',
+    'shelves_drag_books' => 'Перетащите книгу сюда, чтобы добавить на эту полку',
+    'shelves_empty_contents' => 'На этой полке нет книг',
+    'shelves_edit_and_assign' => 'Изменить полку для привязки книг',
+    'shelves_edit_named' => 'Редактировать полку :name',
+    'shelves_edit' => 'Редактировать книжную полку',
+    'shelves_delete' => 'Удалить книжную полку',
+    'shelves_delete_named' => 'Удалить книжную полку :name',
+    'shelves_delete_explain' => "Это приведет к удалению полки с именем ':name'. Привязанные книги удалены не будут.",
+    'shelves_delete_confirmation' => 'Вы уверены, что хотите удалить эту полку?',
+    'shelves_permissions' => 'Доступы к книжной полке',
+    'shelves_permissions_updated' => 'Доступы к книжной полке обновлены',
+    'shelves_permissions_active' => 'Доступы к книжной полке активны',
+    'shelves_copy_permissions_to_books' => 'Наследовать доступы книгам',
+    'shelves_copy_permissions' => 'Копировать доступы',
+    'shelves_copy_permissions_explain' => 'Это применит текущие настройки доступов этой книжной полки ко всем книгам, содержащимся внутри. Перед активацией убедитесь, что все изменения в доступах этой книжной полки сохранены.',
+    'shelves_copy_permission_success' => 'Доступы книжной полки скопированы для :count books',
+    
+    //Books
     'book' => 'Книга',
     'books' => 'Книги',
     'x_books' => ':count книга|:count книг',
@@ -74,6 +105,7 @@ return [
     'books_popular' => 'Популярные книги',
     'books_recent' => 'Недавние книги',
     'books_new' => 'Новые книги',
+    'books_new_action' => 'Новая книга',
     'books_popular_empty' => 'Здесь появятся самые популярные книги.',
     'books_new_empty' => 'Здесь появятся самые последние созданные книги.',
     'books_create' => 'Создать новую книгу',
@@ -89,7 +121,6 @@ return [
     'books_permissions_updated' => 'Разрешения на книгу обновлены',
     'books_empty_contents' => 'Для этой книги нет страниц или разделов.',
     'books_empty_create_page' => 'Создать новую страницу',
-    'books_empty_or' => 'или',
     'books_empty_sort_current_book' => 'Сортировка текущей книги',
     'books_empty_add_chapter' => 'Добавить главу',
     'books_permissions_active' => 'действующие разрешения на книгу',
@@ -97,12 +128,15 @@ return [
     'books_navigation' => 'Навигация по книге',
     'books_sort' => 'Сортировка содержимого книги',
     'books_sort_named' => 'Сортировка книги :bookName',
+    'books_sort_name' => 'Сортировать по имени',
+    'books_sort_created' => 'Сортировать по дате создания',
+    'books_sort_updated' => 'Сортировать по дате обновления',
+    'books_sort_chapters_first' => 'Сначала главы',
+    'books_sort_chapters_last' => 'Главы последние',
     'books_sort_show_other' => 'Показать другие книги',
     'books_sort_save' => 'Сохранить новый порядок',
 
-    /**
-     * Chapters
-     */
+     //Chapters
     'chapter' => 'Глава',
     'chapters' => 'Главы',
     'x_chapters' => ':count глава|:count главы',
@@ -125,9 +159,7 @@ return [
     'chapters_permissions_success' => 'Разрешения главы обновлены',
     'chapters_search_this' => 'Искать в этой главе',
 
-    /**
-     * Pages
-     */
+    //Pages
     'page' => 'Страница',
     'pages' => 'Страницы',
     'x_pages' => ':count страница|:count страниц',
@@ -178,6 +210,8 @@ return [
     'pages_revisions_created_by' => 'Создана',
     'pages_revisions_date' => 'Дата версии',
     'pages_revisions_number' => '#',
+    'pages_revisions_numbered' => 'Ревизия #:id',
+    'pages_revisions_numbered_changes' => 'Ревизия #:id изменения',
     'pages_revisions_changelog' => 'Список изменений',
     'pages_revisions_changes' => 'Изменения',
     'pages_revisions_current' => 'Текущая версия',
@@ -199,18 +233,21 @@ return [
         'message' => ':start :time. Будьте осторожны, чтобы не перезаписывать друг друга!',
     ],
     'pages_draft_discarded' => 'Черновик сброшен, редактор обновлен текущим содержимым страницы',
+    'pages_specific' => 'Конкретная страница',
+    'pages_is_template' => 'Шаблон страницы',
 
-    /**
-     * Editor sidebar
-     */
+    //Editor sidebar
     'page_tags' => 'Теги страницы',
     'chapter_tags' => 'Теги главы',
     'book_tags' => 'Теги книги',
+    'shelf_tags' => 'Теги полки',
     'tag' => 'Тег',
     'tags' =>  'Теги',
+    'tag_name' =>  'Имя тега',
     'tag_value' => 'Значение тега (опционально)',
     'tags_explain' => 'Добавьте теги, чтобы лучше классифицировать ваш контент. \n Вы можете присвоить значение тегу для более глубокой организации.',
     'tags_add' => 'Добавить тег',
+    'tags_remove' => 'Удалить этот тэг',
     'attachments' => 'Вложение',
     'attachments_explain' => 'Загрузите несколько файлов или добавьте ссылку для отображения на своей странице. Они видны на боковой панели страницы.',
     'attachments_explain_instant_save' => 'Изменения здесь сохраняются мгновенно.',
@@ -236,19 +273,22 @@ return [
     'attachments_file_uploaded' => 'Файл успешно загружен',
     'attachments_file_updated' => 'Файл успешно обновлен',
     'attachments_link_attached' => 'Ссылка успешно присоединена к странице',
+    'templates' => 'Шаблоны',
+    'templates_set_as_template' => 'Страница это шаблон',
+    'templates_explain_set_as_template' => 'Вы можете назначить эту страницу в качестве шаблона, её содержимое будет использоваться при создании других страниц. Пользователи смогут использовать этот шаблон в случае, если имеют разрешения на просмотр этой страницы.',
+    'templates_replace_content' => 'Заменить содержимое страницы',
+    'templates_append_content' => 'Добавить к содержанию страницы',
+    'templates_prepend_content' => 'Добавить в начало содержимого страницы',
 
-    /**
-     * Profile View
-     */
+    //Profile View
     'profile_user_for_x' => 'пользователь уже :time',
     'profile_created_content' => 'Созданный контент',
     'profile_not_created_pages' => ':userName не создавал страниц',
     'profile_not_created_chapters' => ':userName не создавал глав',
     'profile_not_created_books' => ':userName не создавал ни одной книги',
+    'profile_not_created_shelves' => ':userName не создал ни одной полки',
 
-    /**
-     * Comments
-     */
+    //Comments
     'comment' => 'Комментарий',
     'comments' => 'Комментарии',
     'comment_add' => 'Комментировать',
@@ -263,13 +303,12 @@ return [
     'comment_deleted_success' => 'Комментарий удален',
     'comment_created_success' => 'Комментарий добавлен',
     'comment_updated_success' => 'Комментарий обновлен',
-    'comment_delete_confirm' => 'Вы уверены, что хотите удалить этот комментарий?',
+    'comment_delete_confirm' => 'Удалить этот комментарий?',
     'comment_in_reply_to' => 'В ответ на :commentId',
 
-    /**
-     * Revision
-     */
-    'revision_delete_confirm' => 'Вы действительно хотите удалить эту ревизию?',
-    'revision_delete_success' => 'Редактирование удалено',
-    'revision_cannot_delete_latest' => 'Не удается удалить последнюю версию.'
+    //Revision
+    'revision_delete_confirm' => 'Удалить эту ревизию?',
+    'revision_restore_confirm' => 'Восстановить эту ревизию? Текущее содержимое будет заменено.',
+    'revision_delete_success' => 'Ревизия удалена',
+    'revision_cannot_delete_latest' => 'Нельзя удалить последнюю версию.'
 ];

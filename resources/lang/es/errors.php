@@ -27,6 +27,7 @@ return [
     'social_account_register_instructions' => 'Si no dispone de una cuenta, puede registrar una cuenta usando la opción de :socialAccount .',
     'social_driver_not_found' => 'Driver social no encontrado',
     'social_driver_not_configured' => 'Su configuración :socialAccount no es correcta.',
+    'invite_token_expired' => 'Este enlace de invitación ha expirado. Puede resetear la contraseña de su cuenta como alternativa.',
 
     // System
     'path_not_writable' => 'El fichero no pudo ser subido a la ruta :filePath . Asegúrese de que es escribible por el servidor.',
@@ -64,6 +65,7 @@ return [
     'role_cannot_be_edited' => 'Este rol no puede ser editado',
     'role_system_cannot_be_deleted' => 'Este rol es un rol de sistema y no puede ser borrado',
     'role_registration_default_cannot_delete' => 'Este rol no puede ser borrado mientras sea el rol por defecto de nuevos registros',
+    'role_cannot_remove_only_admin' => 'Este usuario es el único usuario asignado al rol de administrador. Asigna primero este rol a otro usuario antes de eliminarlo.',
 
     // Comments
     'comment_list' => 'Se ha producido un error al buscar los comentarios.',
